@@ -23,3 +23,12 @@ cd $YCM
 ./install.py --clang-completer
 
 mv tmux.conf ~/.tmux.conf
+
+(cat << EOF
+
+# disable ctrl s command on tty
+# it can be re-enabled with "stty ixany"
+stty -ixon
+
+EOF
+)>> ~/.bashrc
