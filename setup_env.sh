@@ -15,7 +15,11 @@ mv vimrc.conf ~/.vimrc
 #run Vundle
 vim +PluginInstall +qall
 
-cd ~/.vim/bundle/YouCompleteMe
+YCM=~/.vim/bundle/YouCompleteMe
+wget https://raw.githubusercontent.com/Valloric/ycmd/master/cpp/ycm/.ycm_extra_conf.py
+mv .ycm_extra_conf.py $YCM
+
+cd $YCM
 ./install.py --clang-completer
 
 mv tmux.conf ~/.tmux.conf
