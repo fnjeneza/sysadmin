@@ -1,0 +1,10 @@
+[Unit]
+Description=Wekan
+Requires=mongod.service
+After=network.target mongod.service
+
+[Service]
+ExecStart=/home/ubuntu/.local/bin/start-wekan.sh
+
+[Install]
+WantedBy=multi-user.target
