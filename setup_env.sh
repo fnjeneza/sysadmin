@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install -y tmux tree python-flake8 python-pep8 vim 
+sudo apt-get install -y byobu tree python-flake8 python-pep8 vim 
 
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
@@ -21,8 +21,6 @@ mv .ycm_extra_conf.py $YCM
 
 cd $YCM
 ./install.py --clang-completer
-
-mv tmux.conf ~/.tmux.conf
 
 (cat << EOF
 
