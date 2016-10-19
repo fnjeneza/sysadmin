@@ -1,6 +1,6 @@
 #!/bin/bash
 
-sudo apt-get install -y byobu tree python-flake8 python-pep8 vim 
+sudo apt-get install -y byobu tree python-flake8 python-pep8 vim
 
 git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
@@ -30,3 +30,8 @@ stty -ixon
 
 EOF
 )>> ~/.bashrc
+
+cd $PWD
+cp -r developer ~/.vim/
+
+cp -r byobu ~/.byobu
