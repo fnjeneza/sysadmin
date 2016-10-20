@@ -1,0 +1,48 @@
+---
+# Install dokuwiki
+- name: "Setup dokuwiki"
+  hosts: mbwira
+
+  become: true
+  
+  tasks:
+  - name: "Install lighttpd"
+    apt: name=lighttpd state=present
+
+  - name: "Install php7-cgi"
+    apt: name=php7.0-cgi state=present
+
+  - name: "Install php6.0-xml"
+    apt: name=php7.0-xml state=present
+  
+  - name: "Install php7.0-gd"
+    apt: name=php7.0-gd state=present
+    notify:
+      - Enable fastcgi
+      - Enable fastcgi-php
+      - Restart lighttpd
+
+  - name: "Download and Extract dokuwiki"
+    unarchive:
+      src: dokuwiki.tgz
+      dest: /var/www/html
+    notify:
+      - Copy directory to /var/www/html/dokuwiki
+
+  handlers: 
+  - name: "Copy directory to /var/www/html/dokuwiki"
+    file:
+      path: /var/www/html/dokuwiki
+      owner: www-data
+      group: www-data
+      recurse: true
+      state: directory
+
+  - name: Enable fastcgi
+    command: lighty-enable-mod fastcgi
+
+  - name: Enable fastcgi-php
+    command: lighty-enable-mod fastcgi-php
+ 
+  - name: Restart lighttpd
+    service: name=lighttpd state=restarted
