@@ -1,0 +1,16 @@
+#cloud-config
+apt_upgrade: true
+
+byobu_by_default: system
+
+users:
+  - name: toto
+    gecos: jean toto #real name
+    ssh-authorized-keys: 
+      - ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBN2kw3qXpzr+0ZeqzIFIDDMUxtP9UYk+Y1/I+/NpseiiqJtd2trR56lwbacfEPNbq+osP7bIQBQGpa2XQ/atn6I= njeneza@latitude
+    sudo: ['ALL=(ALL) NOPASSWD:ALL']
+    groups: [sudo, audio, lxd]
+    shell: /bin/bash
+
+
+
