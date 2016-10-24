@@ -24,6 +24,12 @@
     - name: "Install byobu"
       apt: name=byobu state=present
 
+    - name: "Install gdb"
+      apt: name=gdb state=present
+
+    - name: "Install valgrind"
+      apt: name=valgrind state=present
+
     - name: "Copy byobu config file"
       copy:
         src: byobu/
