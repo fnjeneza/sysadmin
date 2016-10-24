@@ -6,15 +6,44 @@
         apt: name=vim state=present
         become: true
 
+      - name: "Install python-pep8"
+        apt: name=python-pep8 state=present
+        become: true
+
+      - name: "Install python-flake8"
+        apt: name=python-flake8 state=present
+        become: true
+
+      - name: "Install python-dev"
+        apt: name=python-dev state=present
+        become: true
+
+      - name: "Install python3-dev"
+        apt: name=python3-dev state=present
+        become: true
+
+      - name: "Install build-essential"
+        apt: name=build-essential state=present
+        become: true
+
+      - name: "Install cmake"
+        apt: name=cmake state=present
+        become: true
+
       - name: "Clone Vundle git repo"
         git:
           repo: https://github.com/VundleVim/Vundle.vim.git
           dest: .vim/bundle/Vundle.vim
 
-      - name: "Copy configuration file"
+      - name: "Copy vim configuration file"
         copy:
             src: vimrc.conf
             dest: .vimrc
+
+      - name: "Copy ycm configuration file"
+        copy:
+            src: ycm_extra_conf.py
+            dest: .vim/bundle/YouCompleteMe/.ycm_extra_conf.py
 
       - name: "Create comment directory"
         file:
@@ -30,3 +59,6 @@
         copy:
             src: developer
             dest: .vim
+
+  #      - name: "Init vim"
+  #        command: "vim +PluginInstall +qall"
