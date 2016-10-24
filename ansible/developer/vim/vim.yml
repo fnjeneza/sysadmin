@@ -16,6 +16,15 @@
             src: vimrc.conf
             dest: .vimrc
 
+      - name: "Create comment directory"
+        file:
+            path: .vim/developer/comment
+            state: directory
+
+      - name: "Create cpp directory"
+        file:
+            path: .vim/developer/cpp
+            state: directory
 
       - name: "Copy developer directory"
         copy:
