@@ -1,0 +1,23 @@
+- name: "Install vim"
+  hosts: developer
+
+  tasks:
+      - name: "Install vim"
+        apt: name=vim state=present
+        become: true
+
+      - name: "Clone Vundle git repo"
+        git:
+          repo: https://github.com/VundleVim/Vundle.vim.git
+          dest: .vim/bundle/Vundle.vim
+
+      - name: "Copy configuration file"
+        copy:
+            src: vimrc.conf
+            dest: .vimrc
+
+
+      - name: "Copy developer directory"
+        copy:
+            src: developer
+            dest: .vim
