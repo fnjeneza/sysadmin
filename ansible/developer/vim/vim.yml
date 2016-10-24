@@ -30,35 +30,41 @@
         apt: name=cmake state=present
         become: true
 
-      - name: "Clone Vundle git repo"
-        git:
-          repo: https://github.com/VundleVim/Vundle.vim.git
-          dest: .vim/bundle/Vundle.vim
-
       - name: "Copy vim configuration file"
         copy:
             src: vimrc.conf
-            dest: .vimrc
+            dest: ~/.vimrc
+
+      - name: "Clone Vundle git repo"
+        git:
+          repo: https://github.com/VundleVim/Vundle.vim.git
+          dest: ~/.vim/bundle/Vundle.vim
+
+      - name: "Install plugins"
+        command: "vim +PluginInstall +qall"
+
+      - name: "Install completer for C++"
+        command: "./.vim/bundle/YouCompleteMe/install.py --clang-completer"
 
       - name: "Copy ycm configuration file"
         copy:
             src: ycm_extra_conf.py
-            dest: .vim/bundle/YouCompleteMe/.ycm_extra_conf.py
+            dest: ~/.vim/bundle/YouCompleteMe/.ycm_extra_conf.py
 
       - name: "Create comment directory"
         file:
-            path: .vim/developer/comment
+            path: ~/.vim/developer/comment
             state: directory
 
       - name: "Create cpp directory"
         file:
-            path: .vim/developer/cpp
+            path: ~/.vim/developer/cpp
             state: directory
 
       - name: "Copy developer directory"
         copy:
             src: developer
-            dest: .vim
+            dest: ~/.vim
 
-  #      - name: "Init vim"
-  #        command: "vim +PluginInstall +qall"
+      - name: "Disable ctrl+s in tty"
+        command: "echo 'stty -ixon' >> ~/.bashrc"
