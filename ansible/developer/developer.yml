@@ -1,0 +1,31 @@
+---
+# install developer tools
+# cmake, ccache, build-essential, gcc, vim, ubuntu-sdk
+# clang-tidy, clang-format
+# copy .vim/developer, .vimrc and byobu
+- name: "Setup developer environment"
+  hosts: developer
+  become: true
+
+  tasks:
+
+    - name: "Install ccache"
+      apt: name=ccache state=present
+
+    - name: "Install clang-tidy"
+      apt: name=clang-tidy state=present
+
+    - name: "install clang-format"
+      apt: name=clang-format state=present
+
+    - name: "Install cppcheck"
+      apt: name=cppcheck state=present
+
+    - name: "Install byobu"
+      apt: name=byobu state=present
+
+    - name: "Copy byobu config file"
+      copy:
+        src: byobu/
+        dest: ~/.byobu
+      become: false
