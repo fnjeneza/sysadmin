@@ -1,0 +1,41 @@
+---
+# Install dnsmasq dns
+
+- name: "Install dnsmasq"
+  hosts: dns
+  become: true
+
+  vars:
+    domain: muhira.local
+    gateway: 192.168.1.254
+    range: "192.168.1.1,192.168.1.100"
+
+  tasks:
+
+  - name: "apt install dnmsasq"
+    apt:
+      name: dnsmasq
+      state: present
+
+  - name: "Copy dnsmasq configurations"
+    template:
+      src: dnsmasq.j2
+      dest: /etc/dnsmasq.d/dnsmasq.conf
+      owner: root
+      group: root
+
+  - name: "Copy ad_hosts"
+    copy:
+      src: ad_hosts
+      dest: /etc/hosts.ban
+    
+    notify:
+      - Restart dnsmasq
+      
+  handlers:
+
+  - name: "Restart dnsmasq"
+    service:
+      name: dnsmasq
+      state: restarted
+
