@@ -11,12 +11,25 @@ endif(CCACHE_FOUND)
 
 # name of the executable
 set(bin_name "sample")
+set(static_lib "sample")
+set(shared_lib "sample")
 
 add_executable(${bin_name} src/main.cpp)
+add_library(${static_lib} src/main.cpp)
+add_library(${shared_lib} src/main.cpp)
 
+install(TARGETS ${bin_name} ${shared_lib} ${static_lib}
+        RUNTIME DESTINATION bin
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib
+)
+include_directories(SYSTEM "")
+
+add_compile_options(
+    "-std=c++14;-Wall;-Wpedantic;-Wextra;-Winline;-Wshadow;-Wuseless-cast"
+)
 target_compile_options(
     ${bin_name} PUBLIC
-    "-std=c++14;-Wall;-Wpedantic;-Wextra;-Winline;-Wshadow;-Wuseless-cast"
     "-Wmissing-include-dirs;-Wduplicated-cond;-Wfloat-equal;-Wlogical-op"
     "-Wmissing-declarations;-Wsuggest-override;-Wconversion;-Wredundant-decls"
     "-Wpadded;-Wnon-virtual-dtor;-Wold-style-cast;-Wcast-align;-Woverloaded-virtual"
