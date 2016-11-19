@@ -139,7 +139,10 @@ def init():
 
 
 if __name__ == "__main__":
-    if 'init' == sys.argv[1]:
-        init()
-    else:
-        cmake_or_ninja()
+    try:
+        if 'init' == sys.argv[1]:
+            init()
+        else:
+            cmake_or_ninja()
+    except KeyboardInterrupt as kbi:
+        print("\n")
