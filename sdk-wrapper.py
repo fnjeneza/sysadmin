@@ -6,6 +6,15 @@ import subprocess
 import shlex
 import readline
 
+"""
+sdk init "Initialize a project.user settings"
+sdk cmake "run cmake from build directory in the appropriate container"
+sdk ninja "run ninja from build directory in the appropriate container"
+sdk build-kit ls "list all build-kit. Current build-kit are marked with as star"
+sdk build-kit set "update a value of a build-kit"
+sdk build-kit add "add a build-kit"
+sdk build-kit show "show info about a build-kit"
+"""
 command = sys.argv[0]
 wd = os.getcwd()
 CONF_FILE = ".project.user.py"
@@ -22,8 +31,7 @@ def recursive_find(file_name , stop_path = None):
             if os.path.isfile(path):
                 return path
 
-        os.chdir("..")
-        _wd = os.getcwd()
+        _wd, _ = os.path.split(_wd)
 
     return None
 
@@ -32,6 +40,10 @@ def cmake_or_ninja():
     Run a cmake or ninja command depending on user's input
     """
     path = recursive_find(CONF_FILE)
+    if not path:
+        print("%s not found. Abort" % CONF_FILE)
+        return None;
+
     container = None
     full_cmd = " ".join(sys.argv[2:])
     source_dir = None
@@ -64,7 +76,17 @@ def cmake_or_ninja():
     print('*'*20)
     print(args)
     print('*'*20)
-    #ret = subprocess.run(args, universal_newlines=True)
+    ret = subprocess.run(args, universal_newlines=True)
+    compile_cmd_path = os.path.join(wd, "compile_commands.json")
+    dst = os.path.join(source_dir, "compile_commands.json")
+
+    if os.path.exists(compile_cmd_path):
+        try:
+            #symlink to source dir
+            os.symlink(compile_cmd_path, dst)
+        except FileExistsError:
+            pass
+
 
 def init():
     """
@@ -75,6 +97,8 @@ def init():
             source_dir : /path/source
             build_dir : /path/build
             container : device-armhf
+            compiler : /usr/bin/arm-linux-gnueabihf-gcc
+            qmake_executable: /usr/bin/qt5-qmake-arm-linux-gnueabihf
         }
         x86: {
             source_dir : /path/source
@@ -101,21 +125,31 @@ def init():
 
     while add_build == 'y':
 
-        build_name = input("architecture[x86_64, armhf] (default x86_64): ")
-        if not build_name:
-            build_name="x86_64"
+        message = "architecture[x86_64, armhf] (default x86_64): "
+        build_name = input(message) or "x86_64"
+        current_build = build_name
 
         if ' ' in build_name:
             print("no space character allowed\nabort")
             exit()
-        source_dir = input("\tsource directoy(default, current directory): ")
-        if not source_dir:
-            source_dir = os.getcwd()
+
+        message = "\tsource directoy(default, current directory): "
+        source_dir = input(message) or os.getcwd()
+
         path = os.path.join(os.path.expanduser('~'), "workspace",
                 "build_"+project_name+"_"+build_name)
-        build_dir = input("\tbuild directory(default, %s): " % path)
+        build_dir = input("\tbuild directory(default, %s): " % path) or path
+
+        try:
+            os.mkdir(path)
+        except FileExistsError:
+            pass
+
         container = input("\tcontainer(default, empty): ")
-        build = {"build_dir":build_dir, "source_dir":source_dir,
+        compiler = input("\tcompiler(cmake determine default compiler): ")
+        qmake_executable = input("\tqmake executable(default found by cmake): ")
+        build = {"build_dir":build_dir,
+                "source_dir":source_dir,
                 "container":container}
         dict_build[build_name] = build
 
