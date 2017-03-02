@@ -12,6 +12,7 @@ LLVM_ARCHIVE=$LLVM.src.tar.xz
 CLANG_ARCHIVE=$CLANG.src.tar.xz
 PREFIX=$HOME/.local
 GCC_PREFIX=$HOME/.local
+NB_CPU=`cat /proc/cpuinfo | grep processor | wc -l`
 
 cd /tmp
 wget http://releases.llvm.org/$VERSION/$LLVM_ARCHIVE
@@ -29,7 +30,7 @@ mkdir /tmp/build && cd /tmp/build
 
 export LD_LIBRARY_PATH=$GCC_PREFIX/lib64/:$GCC_PREFIX/lib/:$LD_LIBRARY_PATH
 
-cmake -G "Unix Makefiles"
+cmake -G ninja
 	-DCMAKE_BUILD_TYPE=release \
 	-DPYTHON_EXECUTABLE=$PREFIX/bin/python3.6 \
 	-DCMAKE_CXX_COMPILER=$PREFIX/bin/g++  \
@@ -37,4 +38,4 @@ cmake -G "Unix Makefiles"
 	-DCMAKE_INSTALL_PREFIX=$PREFIX \
 	/tmp/$LLVM.src/
 
-make -j5
+ninja && ninja install

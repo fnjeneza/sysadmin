@@ -14,6 +14,7 @@ sdk build-kit ls "list all build-kit. Current build-kit are marked with as star"
 sdk build-kit set "update a value of a build-kit"
 sdk build-kit add "add a build-kit"
 sdk build-kit show "show info about a build-kit"
+sdk cmd "run a any cmd in the sdk environment"
 """
 command = sys.argv[0]
 wd = os.getcwd()
@@ -56,6 +57,9 @@ def cmake_or_ninja():
             container = build["container"]
             source_dir = build["source_dir"]
 
+    # create build directory if not exists
+    if not os.path.exists(wd):
+        os.mkdir(wd)
 
 
     if  sys.argv[1] == 'cmake':
@@ -73,9 +77,9 @@ def cmake_or_ninja():
 
 
     args = shlex.split(full_cmd)
-    print('*'*20)
-    print(args)
-    print('*'*20)
+    #print('*'*20)
+    #print(args)
+    #print('*'*20)
     ret = subprocess.run(args, universal_newlines=True)
     compile_cmd_path = os.path.join(wd, "compile_commands.json")
     dst = os.path.join(source_dir, "compile_commands.json")
@@ -133,7 +137,7 @@ def init():
             print("no space character allowed\nabort")
             exit()
 
-        message = "\tsource directoy(default, current directory): "
+        message = "\tsource directory(default, current directory): "
         source_dir = input(message) or os.getcwd()
 
         path = os.path.join(os.path.expanduser('~'), "workspace",
