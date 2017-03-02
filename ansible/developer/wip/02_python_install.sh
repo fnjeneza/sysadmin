@@ -13,4 +13,4 @@ cd Python-$VERSION
 make -j$NB_CPU && make altinstall
 
 cd $PREFIX/bin
-ln -s python$VER python3
+ln -s -f python$VER python3
