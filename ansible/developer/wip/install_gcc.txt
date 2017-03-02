@@ -1,0 +1,23 @@
+VERSION=6.3.0
+GCC=gcc-$VERSION
+GCC_AR=$GCC.tar.bz2
+DIR=/tmp
+PREFIX=$HOME/.local
+
+cd $DIR
+wget http://fr.mirror.babylon.network/gcc/releases/$GCC/$GCC_AR
+
+tar xvf $GCC_AR
+
+sudo apt update 
+sudo apt install build-essential gdb cmake
+
+cd $DIR/$GCC
+./contrib/download_prerequisites
+cd $DIR
+
+mkdir -p $HOME/.local/
+
+mkdir $DIR/objdir && cd $DIR/objdir
+$DIR/$GCC/configure --prefix=$PREFIX --enable-languages=c,c++,fortran,go --disable-multilib --program-suffix=$VERSION
+make -j5 && make install

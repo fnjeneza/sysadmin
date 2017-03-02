@@ -1,0 +1,72 @@
+yum groupinstall -y "development tools"
+yum install -y zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel readline-devel tk-devel gdbm-devel db4-devel libpcap-devel xz-devel expat-devel
+yum install -y wget tar
+
+cd /tmp
+wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tar.xz
+tar xvf Python-3.6.0.tar.xz
+cd Python-3.6.0
+./configure --prefix=$HOME/.local --enable-shared LDFLAGS="-Wl,-rpath /usr/local/lib"
+make -j4 && make altinstall
+
+export PATH=$PATH:$HOME/.local/bin/
+export LD_LIBRARY_PATH=$HOME/.local/lib/
+
+VIRTENV=$HOME/.orchestration
+python3.6 -m venv $VIRTENV
+source $VIRTENV/bin/activate
+
+cd /tmp
+git clone https://github.com/fnjeneza/sysadmin.git
+cd sysadmin/ansible/developer/
+
+
+# The following can be automated by ansible
+cd /tmp
+wget https://www.samba.org/ftp/ccache/ccache-3.3.4.tar.bz2
+tar xvf ccache-3.3.4.tar.bz2
+cd ccache-3.3.4
+
+./configure --prefix=$HOME/.local
+make -j4
+
+# cmake installation
+cd /tmp
+wget https://cmake.org/files/v3.7/cmake-3.7.2-Linux-x86_64.sh
+sh make-3.7.2-Linux-x86_64.sh
+
+
+
+# llvm installation
+
+cd /tmp
+#wget http://releases.llvm.org/3.9.1/libcxx-3.9.1.src.tar.xz
+#tar xvf libcxx-3.9.1.src.tar.xz
+#mkdir /tmp/buildlib && mb /tmp/buildlib
+#cmake37 ../libcxx-3.9.1.src -DCMAKE_CXX_COMPILER=$HOME/.local/bin/g++6.3.0 -DCMAKE_PREFIX_INSTALL=$HOME/.local/
+#make -j5 && make install
+
+cd/tmp
+wget http://releases.llvm.org/3.9.1/llvm-3.9.1.src.tar.xz
+tar xvf llvm-3.9.1.src.tar.xz
+
+wget http://releases.llvm.org/3.9.1/cfe-3.9.1.src.tar.xz
+tar xvf cfe-3.9.1.src.tar.xz
+mv cfe-3.9.1.src llvm-3.9.1.src/tools/clang
+
+wget http://releases.llvm.org/3.9.1/clang-tools-extra-3.9.1.src.tar.xz
+tar xvf clang-tools-extra-3.9.1.src.tar.xz
+mv clang-tools-extra-3.9.1.src llvm-3.9.1.src/tools/clang/extra
+
+mkdir /tmp/build && cd /tmp/build
+export LD_LIBRARY_PATH=$HOME/.local/lib64/:$HOME/.local/lib/:$LD_LIBRARY_PATH
+
+cmake -G "Unix Makefiles" 
+	-DCMAKE_BUILD_TYPE=release \
+	-DPYTHON_EXECUTABLE=$HOME/.local/bin/python3.6 \
+	-DCMAKE_CXX_COMPILER=$HOME/.local/bin/gcc6.3.0  \
+	-DCMAKE_C_COMPILER=/home/njeneza/.local/bin/gcc6.3.0 \
+	-DCMAKE_INSTALL_PREFIX=$HOME/.local/bin \
+	/tmp/llvm-3.9.1.src/
+
+make -j5
