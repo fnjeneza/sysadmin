@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VER=3.6
+VER=3.5
 VERSION=$VER.0
 PREFIX=$HOME/.local
 NB_CPU=`cat /proc/cpuinfo | grep processor | wc -l`
@@ -13,4 +13,4 @@ cd Python-$VERSION
 make -j$NB_CPU && make altinstall
 
 cd $PREFIX/bin
-ln -s -f python$VER python3
+ln -sf python$VER python3
