@@ -1,6 +1,6 @@
-VERSION=6.3.0
+VERSION=7.3.0
 GCC=gcc-$VERSION
-GCC_AR=$GCC.tar.bz2
+GCC_AR=$GCC.tar.xz
 DIR=/tmp
 PREFIX=$HOME/.local
 NB_CPU=`cat /proc/cpuinfo | grep processor | wc -l`
