@@ -1,4 +1,4 @@
-VERSION=7.2.0
+VERSION=7.3.0
 GCC=gcc-$VERSION
 GCC_AR=$GCC.tar.xz
 DIR=/tmp

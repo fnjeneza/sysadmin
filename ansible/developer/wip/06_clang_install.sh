@@ -4,7 +4,7 @@ echo "llvm installation"
 
 set -e
 
-VERSION=3.9.1
+VERSION=4.0.1
 LLVM=llvm-$VERSION
 CLANG=cfe-$VERSION
 CLANG_EXTRA=clang-tools-extra-$VERSION
@@ -19,7 +19,7 @@ wget http://releases.llvm.org/$VERSION/$LLVM_ARCHIVE
 tar xvf $LLVM_ARCHIVE
 
 wget http://releases.llvm.org/$VERSION/$CLANG_ARCHIVE
-tar xvf CLANG_ARCHIVE
+tar xvf $CLANG_ARCHIVE
 mv $CLANG.src $LLVM.src/tools/clang
 
 wget http://releases.llvm.org/$VERSION/$CLANG_EXTRA.src.tar.xz
@@ -30,11 +30,11 @@ mkdir /tmp/build && cd /tmp/build
 
 export LD_LIBRARY_PATH=$GCC_PREFIX/lib64/:$GCC_PREFIX/lib/:$LD_LIBRARY_PATH
 
-cmake -G ninja
+cmake -G Ninja \
 	-DCMAKE_BUILD_TYPE=release \
-	-DPYTHON_EXECUTABLE=$PREFIX/bin/python3.6 \
-	-DCMAKE_CXX_COMPILER=$PREFIX/bin/g++  \
-	-DCMAKE_C_COMPILER=$PREFIX/bin/gcc \
+	-DPYTHON_EXECUTABLE=$PREFIX/bin/python3 \
+	-DCMAKE_CXX_COMPILER=$PREFIX/bin/g++6.3.0 \
+	-DCMAKE_C_COMPILER=$PREFIX/bin/gcc6.3.0 \
 	-DCMAKE_INSTALL_PREFIX=$PREFIX \
 	/tmp/$LLVM.src/
 
