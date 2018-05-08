@@ -6,7 +6,7 @@ PREFIX=$HOME/.local
 NB_CPU=`cat /proc/cpuinfo | grep processor | wc -l`
 
 cd $DIR
-wget http://fr.mirror.babylon.network/gcc/releases/$GCC/$GCC_AR
+wget ftp://ftp.uvsq.fr/pub/gcc/releases/$GCC/$GCC_AR
 
 tar xvf $GCC_AR
 
