@@ -6,13 +6,16 @@
   become: true
   
   tasks:
+  - name: "Update apt cache"
+    apt: update_cache=yes
+
   - name: "Install lighttpd"
     apt: name=lighttpd state=present
 
   - name: "Install php7-cgi"
     apt: name=php7.0-cgi state=present
 
-  - name: "Install php6.0-xml"
+  - name: "Install php7.0-xml"
     apt: name=php7.0-xml state=present
   
   - name: "Install php7.0-gd"
@@ -24,20 +27,18 @@
 
   - name: "Download and Extract dokuwiki"
     unarchive:
-      src: dokuwiki.tgz
+      src: https://download.dokuwiki.org/src/dokuwiki/dokuwiki-stable.tgz
       dest: /var/www/html
-    notify:
-      - Copy directory to /var/www/html/dokuwiki
-
-  handlers: 
-  - name: "Copy directory to /var/www/html/dokuwiki"
-    file:
-      path: /var/www/html/dokuwiki
+      remote_src: yes
+      list_files: yes
       owner: www-data
       group: www-data
-      recurse: true
-      state: directory
+    register: dokuwiki_folder
 
+  - name: "Move dokuwiki.x.y.z to dokuwiki"
+    command: mv /var/www/html/{{dokuwiki_folder.files[0]}} /var/www/html/dokuwiki
+
+  handlers:
   - name: Enable fastcgi
     command: lighty-enable-mod fastcgi
 
