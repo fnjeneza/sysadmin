@@ -20,7 +20,7 @@
       src: ~/.dotfiles/{{item}}
       dest: ~/{{item}}
     with_items:
-      - .tmux 
+      - .tmux .conf
       - .bashrc
       - .Xresources
 
