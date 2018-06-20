@@ -1,0 +1,53 @@
+---
+# Install a developer environment
+- name: "Setup developer environment"
+  hosts: localhost
+
+  tasks:
+  - name: "Update apt cache"
+    apt: update_cache=yes
+    become: true
+
+  - name: "clone dotfiles"
+    git: 
+      repo: https://github.com/fnjeneza/dotfiles.git
+      dest: ~/.dotfiles
+  
+  - name: create links to dotfiles
+    file:
+      force: yes
+      state: link
+      src: ~/.dotfiles/{{item}}
+      dest: ~/{{item}}
+    with_items:
+      - .tmux 
+      - .bashrc
+      - .Xresources
+
+  - name: create links to dotfiles for i3 config
+    file:
+      force: yes
+      state: link
+      src: ~/.dotfiles/i3
+      dest: ~/.config/i3
+
+  - name: Install apps
+    apt: name={{ item }} state=latest
+    become: true
+    with_items:
+      - tmux
+      - vim
+      - i3
+
+  - name: Compile and install stterm
+    copy:
+      src: ~/.dotfiles/stterm 
+      dest: ~/tmp/
+
+  - name: Clone Vundle git repo
+    git:
+      repo: https://github.com/VundleVim/Vundle.vim.git
+      dest: ~/.vim/bundle/Vundle.vim
+
+  - name: Install vim plugins
+    command: "vim +PluginInstall +qall" 
