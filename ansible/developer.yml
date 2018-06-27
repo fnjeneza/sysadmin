@@ -42,7 +42,7 @@
   - name: Compile and install stterm
     copy:
       src: ~/.dotfiles/stterm 
-      dest: ~/tmp/
+      dest: /tmp/
 
   - name: Clone Vundle git repo
     git:
