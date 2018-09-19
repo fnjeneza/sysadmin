@@ -23,10 +23,13 @@
         - apt-transport-https
         - ca-certificates
         - curl
-        - software-p"roperties-common
+        - software-properties-common
 
   - name: Add docker official GPG key
-    command: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+    apt_key:
+      url: https://download.docker.com/linux/ubuntu/gpg
+      state: present
+    become: true
 
   - name: lsb_release
     command: "lsb_release -cs"
@@ -34,8 +37,9 @@
 
   - name: Set docker stable repository
     apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable
         state: present
+    become: true
 
   - name: Update apt cache
     apt: update_cache=yes
