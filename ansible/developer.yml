@@ -9,10 +9,10 @@
     become: true
 
   - name: "clone dotfiles"
-    git: 
+    git:
       repo: https://github.com/fnjeneza/dotfiles.git
       dest: ~/.dotfiles
-  
+
   - name: create links to dotfiles
     file:
       force: yes
@@ -20,7 +20,7 @@
       src: ~/.dotfiles/{{item}}
       dest: ~/{{item}}
     with_items:
-      - .tmux .conf
+      - .tmux.conf
       - .bashrc
       - .Xresources
 
@@ -41,7 +41,7 @@
 
   - name: Compile and install stterm
     copy:
-      src: ~/.dotfiles/stterm 
+      src: ~/.dotfiles/stterm
       dest: /tmp/
 
   - name: Clone Vundle git repo
@@ -50,4 +50,4 @@
       dest: ~/.vim/bundle/Vundle.vim
 
   - name: Install vim plugins
-    command: "vim +PluginInstall +qall" 
+    command: "vim +PluginInstall +qall"
