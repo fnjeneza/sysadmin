@@ -1,0 +1,48 @@
+---
+# Install a developer environment
+- name: "Setup docker environment"
+  hosts: localhost
+
+  tasks:
+  - name: Update apt cache
+    apt: update_cache=yes
+    become: true
+
+  - name: Remove old versions
+    apt: name={{ item }} state=absent
+    become: true
+    with_items:
+        - docker
+        - docker-engine
+        - docker.io
+
+  - name: Install packages to allow apt to use a repository over HTTPS
+    apt: name={{ item }} state=present
+    become: true
+    with_items:
+        - apt-transport-https
+        - ca-certificates
+        - curl
+        - software-p"roperties-common
+
+  - name: Add docker official GPG key
+    command: "curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+
+  - name: lsb_release
+    command: "lsb_release -cs"
+    register: lsb_release
+
+  - name: Set docker stable repository
+    apt_repository:
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release }} stable
+        state: present
+
+  - name: Update apt cache
+    apt: update_cache=yes
+    become: true
+
+  - name: Install docker CE
+    apt: name={{ item }} state=present
+    become: true
+    with_items:
+        - docker-ce
