@@ -29,13 +29,9 @@
       url: https://download.docker.com/linux/ubuntu/gpg
       state: present
 
-  - name: lsb_release
-    command: "lsb_release -cs"
-    register: lsb_release
-
   - name: Set docker stable repository
     apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ lsb_release.stdout }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
         state: present
 
   - name: Update apt cache
@@ -45,6 +41,11 @@
     apt: name=docker-ce state=present
 
   - name: Check if docker is installed
-    command: docker run hello-world
+    command: docker --version
     register: out
   - debug: var=out.stdout
+
+  - name : Ensure group docker exists
+    group:
+      name: docker
+      state: present
