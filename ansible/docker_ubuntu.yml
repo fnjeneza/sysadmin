@@ -49,3 +49,8 @@
     group:
       name: docker
       state: present
+
+  - name: Enable docker on boot
+    systemd:
+        name: docker
+        enabled: true
