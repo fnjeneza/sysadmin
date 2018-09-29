@@ -1,1 +1,2 @@
 mbwira	ansible_host=10.73.73.33 ansible_python_interpreter=/usr/bin/python3
+toto	ansible_python_interpreter=/usr/bin/python3 ansible_onnection=local

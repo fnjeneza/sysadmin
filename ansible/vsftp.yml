@@ -1,0 +1,32 @@
+---
+# Install a FTP server
+# ansible-playbook ansible/vsftp.yml -i inventory -K --become
+
+- name: "Setup docker environment"
+  hosts: ftp-server
+  become: true
+
+  tasks:
+  - name: Update apt cache
+    apt: update_cache=yes
+
+  - name: Install vsftpd
+    apt: name=vsftpd state=present
+
+  - name: Enable anonymous connection
+    replace:
+        path: /etc/vsftpd.conf
+        regexp: '^anonymous_enable=NO'
+        replace: 'anonymous_enable=YES'
+        backup: yes
+
+  - name: Enable ssl
+    replace:
+        path: /etc/vsftpd.conf
+        regexp: '^ssl_enable=NO'
+        replace: 'ssl_enable=YES'
+
+  - name: Restarting vsftpd
+    systemd:
+        name: vsftpd
+        state: restarted
