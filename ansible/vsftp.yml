@@ -2,7 +2,7 @@
 # Install a FTP server
 # ansible-playbook ansible/vsftp.yml -i inventory -K --become
 
-- name: "Setup docker environment"
+- name: "Setup vsftpd FTP server"
   hosts: ftp-server
   become: true
 

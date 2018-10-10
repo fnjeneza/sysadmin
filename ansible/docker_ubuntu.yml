@@ -5,6 +5,7 @@
 - name: "Setup docker environment"
   hosts: docker-target
   become: true
+  become_method: su
 
   tasks:
   - name: Update apt cache
@@ -27,31 +28,13 @@
 
   - name: Add docker official GPG key
     apt_key:
-      url: https://download.docker.com/linux/ubuntu/gpg
+      url: https://download.docker.com/linux/{{ ansible_distribution|lower }}/gpg
       state: present
-    when:
-      - ansible_distribution == 'Ubuntu'
-
-  - name: Add docker official GPG key
-    apt_key:
-      url: https://download.docker.com/linux/debian/gpg
-      state: present
-    when:
-      - ansible_distribution == 'Debian'
 
   - name: Set docker stable repository
     apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/ubuntu {{ ansible_distribution_release }} stable
+        repo: deb [arch=amd64] https://download.docker.com/linux/{{ ansible_distribution|lower }} {{ ansible_distribution_release }} stable
         state: present
-    when:
-      - ansible_distribution == 'Ubuntu'
-
-  - name: Set docker stable repository
-    apt_repository:
-        repo: deb [arch=amd64] https://download.docker.com/linux/debian {{ ansible_distribution_release }} stable
-        state: present
-    when:
-      - ansible_distribution == 'Debian'
 
   - name: Update apt cache
     apt: update_cache=yes
