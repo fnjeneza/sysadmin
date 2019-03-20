@@ -8,6 +8,17 @@
     apt: update_cache=yes
     become: true
 
+  - name: Install apps
+    apt: name={{ item }} state=latest
+    become: true
+    with_items:
+      - xorg
+      - firefox-esr
+      - tmux
+      - vim
+      - i3
+      - git
+
   - name: "clone dotfiles"
     git:
       repo: https://github.com/fnjeneza/dotfiles.git
@@ -22,6 +33,7 @@
     with_items:
       - .tmux.conf
       - .bashrc
+      - .vimrc
       - .Xresources
 
   - name: create links to dotfiles for i3 config
@@ -31,18 +43,10 @@
       src: ~/.dotfiles/i3
       dest: ~/.config/i3
 
-  - name: Install apps
-    apt: name={{ item }} state=latest
-    become: true
-    with_items:
-      - tmux
-      - vim
-      - i3
-
-  - name: Compile and install stterm
-    copy:
-      src: ~/.dotfiles/stterm
-      dest: /tmp/
+  # - name: Compile and install stterm
+  #   copy:
+  #     src: ~/.dotfiles/stterm
+  #     dest: /tmp/
 
   - name: Clone Vundle git repo
     git:
