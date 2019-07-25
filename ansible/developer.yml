@@ -11,7 +11,7 @@
 
   - name: Install apps
     apt:
-      name: ['sudo', 'xorg', 'firefox-esr', 'tmux', 'vim', 'i3', 'git']
+      name: ['sudo', 'curl', 'xorg', 'firefox-esr', 'tmux', 'vim', 'i3', 'git']
       state: latest
     become: true
 
