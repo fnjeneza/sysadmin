@@ -20,6 +20,11 @@
       repo: https://github.com/fnjeneza/dotfiles.git
       dest: ~/.dotfiles
 
+  - name: Create~/.config
+    file:
+      path: ~/.config
+      state: directory
+
   - name: create links to dotfiles
     file:
       force: yes
