@@ -2,6 +2,7 @@
 # Install a developer environment
 - name: "Setup developer environment"
   hosts: localhost
+  become_method: su
 
   tasks:
   - name: "Update apt cache"
@@ -9,16 +10,10 @@
     become: true
 
   - name: Install apps
-    apt: name={{ item }} state=latest
+    apt:
+      name: ['sudo', 'xorg', 'firefox-esr', 'tmux', 'vim', 'i3', 'git']
+      state: latest
     become: true
-    with_items:
-      - sudo
-      - xorg
-      - firefox-esr
-      - tmux
-      - vim
-      - i3
-      - git
 
   - name: "clone dotfiles"
     git:
