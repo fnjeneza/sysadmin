@@ -36,6 +36,7 @@
       - .bashrc
       - .vimrc
       - .Xresources
+      - .profile
 
   - name: create links to dotfiles for i3 config
     file:
@@ -43,11 +44,6 @@
       state: link
       src: ~/.dotfiles/i3
       dest: ~/.config/i3
-
-  # - name: Compile and install stterm
-  #   copy:
-  #     src: ~/.dotfiles/stterm
-  #     dest: /tmp/
 
   - name: Clone Vundle git repo
     git:
