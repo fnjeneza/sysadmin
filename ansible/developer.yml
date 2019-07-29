@@ -52,3 +52,12 @@
 
   - name: Install vim plugins
     command: "vim +PluginInstall +qall"
+
+  - name: Install st
+    shell: |
+      TEMP=`mktemp -d`
+      mkdir -p ~/.local/bin
+      docker build -t st -f st.dockerfile `mktemp -d`
+      docker run --rm -v $HOME/.local/bin:/app st
+      docker image rm st
+
