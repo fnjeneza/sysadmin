@@ -1,10 +1,9 @@
-FROM ubuntu
+FROM gcc:8
 
 RUN apt update && apt install -y --no-install-recommends \
     git \
     automake \
     ca-certificates \
-    gcc \
     libx11-dev \
     libxft-dev
 
